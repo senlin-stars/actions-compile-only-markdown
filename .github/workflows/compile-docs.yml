@@ -1,0 +1,27 @@
+name: Publish to docs branch
+on:
+  workflow_dispatch: # Manual trigger
+  push:
+    branches: [main]
+
+jobs:
+  parse_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: 'aryailia/tetra'
+          path: "${{ GITHUB_WORKSPACE }}/tetra"
+          ref:  main
+
+      - name: Tree for debugging
+        run: tree
+          
+      - name: Install minimal nightly rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile:   minimal
+          toolchain: nightly
+
+      - name: Build rust program
+        run:  cargo build --manifest-path ./tetra
