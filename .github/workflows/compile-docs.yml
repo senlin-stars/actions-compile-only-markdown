@@ -24,4 +24,4 @@ jobs:
           toolchain: nightly
 
       - name: Build rust program
-        run:  cargo build --manifest-path ./tetra
+        run:  cargo build --manifest-path ./tetra/Cargo.toml
