@@ -16,7 +16,7 @@ jobs:
 
       - name: Tree for debugging
         run: tree
-          
+
       - name: Install minimal nightly rust
         uses: actions-rs/toolchain@v1
         with:
@@ -25,3 +25,6 @@ jobs:
 
       - name: Build rust program
         run:  cargo build --manifest-path ./tetra/Cargo.toml
+
+      - name: Parse
+        run:  parse.sh "./tetra/target/debug/tetra-cli"
