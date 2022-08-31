@@ -10,9 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: 'aryailia/tetra'
-          path: "${{ GITHUB_WORKSPACE }}/tetra"
-          ref:  main
+          repository: aryailia/tetra
+          path:       ./tetra
+          ref:        main
 
       - name: Tree for debugging
         run: tree
