@@ -45,6 +45,9 @@ jobs:
           ${{ secrets.PUSH_TO_DOCS_SECRET }}
           EOF
 
+      - name: Remove .gitignore that ignores ./docs
+        run: rm .gitignore
+
       - name: Push to gh_pages branch
         env:
           SSH_AUTH_SOCKET: /tmp/ssh_agent.sock
