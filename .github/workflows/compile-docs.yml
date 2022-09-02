@@ -55,8 +55,8 @@ jobs:
           git add docs
           git config user.email "bot@users.noreply.github.com"
           git config user.name "GitHub Actions: ${{ env.GITHUB_ACTION }}"
-          git commit -m 'publishing public'
-          git subtree split --prefix public --branch docs
+          git commit -m "publishing docs $( date +'%Y-%m-%d %H-%M-%S' )"
+          git subtree split --prefix docs --branch docs
           git checkout docs
           git status
           git remote -v
