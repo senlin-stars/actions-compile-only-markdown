@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Clone the current project to ./
         uses: actions/checkout@v3
+        with:
+          ref: main
 
       - name: Clone the parser to ./tetra
         uses: actions/checkout@v3
