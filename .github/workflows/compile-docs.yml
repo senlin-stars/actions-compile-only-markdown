@@ -33,10 +33,14 @@ jobs:
       - name: Parse all the documentation
         run:  ./parse.sh "./tetra/target/debug/tetra-cli"
 
+
       - name: Copy LICENSE over
         run: cp ./LICENSE ./docs/LICENSE
 
-      - name: Copy github action over
+      # The manual trigger only shows up on the web UI if the Action with the
+      # 'workflow_dispatch' is present on the default branch. Our default
+      # branch is not 'main' but is 'docs'
+      - name: Copy github action over so that workflow_dispatch works on GitHub web UI
         run: cp -r ./.github ./docs/.github
 
       - name: Verify then add GitHub SSH key
