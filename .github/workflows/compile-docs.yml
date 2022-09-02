@@ -45,8 +45,11 @@ jobs:
           ${{ secrets.PUSH_TO_DOCS_SECRET }}
           EOF
 
-      - name: Remove .gitignore that ignores ./docs
-        run: rm .gitignore
+      - name: Remove ./.gitignore that ignores ./docs
+        run: rm ./.gitignore
+
+      - name: Remove ./tetra since compilation changes files and .gitignore removed
+        run: rm -r ./tetra
 
       - name: Push to gh_pages branch
         env:
