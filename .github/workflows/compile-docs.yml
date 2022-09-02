@@ -8,13 +8,17 @@ jobs:
   parse_docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Clone the current project to ./
+        uses: actions/checkout@v3
+
+      - name: Clone the parser to ./tetra
+        uses: actions/checkout@v3
         with:
           repository: aryailia/tetra
           path:       ./tetra
           ref:        main
 
-      - name: Tree for debugging
+      - name: Directory tree for debugging info
         run: tree
 
       - name: Install minimal nightly rust
@@ -26,8 +30,8 @@ jobs:
       - name: Build rust program
         run:  cargo build --manifest-path ./tetra/Cargo.toml
 
-      - name: Parse
-        run:  parse.sh "./tetra/target/debug/tetra-cli"
+      - name: Parse all the documentation
+        run:  ./parse.sh "./tetra/target/debug/tetra-cli"
 
       - name: Verify then add GitHub SSH key
         run: |
