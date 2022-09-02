@@ -32,8 +32,12 @@ jobs:
 
       - name: Parse all the documentation
         run:  ./parse.sh "./tetra/target/debug/tetra-cli"
+
       - name: Copy LICENSE over
         run: cp ./LICENSE ./docs/LICENSE
+
+      - name: Copy github action over
+        run: cp -r ./.github ./docs/.github
 
       - name: Verify then add GitHub SSH key
         run: |
