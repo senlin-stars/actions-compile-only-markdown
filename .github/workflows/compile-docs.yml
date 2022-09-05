@@ -1,0 +1,80 @@
+name: Publish to docs branch
+on:
+  workflow_dispatch: # Manual trigger
+  push:
+    branches: [main]
+
+jobs:
+  parse_docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the current project to ./
+        uses: actions/checkout@v3
+        with:
+          ref:   main
+          token: ${{ secrets.WRITER_PAT }}
+
+      - name: Clone the parser to ./tetra
+        uses: actions/checkout@v3
+        with:
+          repository: aryailia/tetra
+          path:       ./tetra
+          ref:        main
+
+      - name: Directory tree for debugging info
+        run: tree
+
+      - name: Install minimal nightly rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile:   minimal
+          toolchain: nightly
+
+      - name: Build rust program
+        run:  cargo build --manifest-path ./tetra/Cargo.toml
+
+      - name: Parse all the documentation
+        run:  ./parse.sh "./tetra/target/debug/tetra-cli"
+
+
+      - name: Copy LICENSE over
+        run: cp ./LICENSE ./docs/LICENSE
+
+      # The manual trigger only shows up on the web UI if the Action with the
+      # 'workflow_dispatch' is present on the default branch. Our default
+      # branch is not 'main' but is 'docs'
+      - name: Copy github action over so that workflow_dispatch works on GitHub web UI
+        run: cp -r ./.github ./docs/.github
+
+      #- name: Verify then add GitHub SSH key
+      #  run: |
+      #    [ "$( ssh-keyscan -t rsa github.com | tee github-key-temp | ssh-keygen -lf - 2>/dev/null )" \
+      #    = "2048 SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8 github.com (RSA)" ] \
+      #    || { printf "Invalid GitHub SSH key" >&2; exit 1; }
+      #    mkdir ~/.ssh
+      #    cat github-key-temp >>~/.ssh/known_hosts
+      #    eval "$( ssh-agent -s )"
+      #    <<EOF ssh-add -
+      #    ${{ secrets.PUSH_TO_DOCS_SECRET }}
+      #    EOF
+
+      - name: Remove ./.gitignore that ignores ./docs
+        run: rm ./.gitignore
+
+      - name: Remove ./tetra since compilation changes files and .gitignore removed
+        run: rm -r ./tetra
+
+      - name: Push to gh_pages branch
+        #env:
+        #  SSH_AUTH_SOCKET: /tmp/ssh_agent.sock
+        run: |
+          git add docs
+          git config user.email "bot@users.noreply.github.com"
+          git config user.name "senlin-stars"
+          git config user.password "${{ secrets.WRITER_PAT }}"
+          git commit -m "publishing docs $( date +'%Y-%m-%d %H-%M-%S' )"
+          git subtree split --prefix docs --branch docs
+          git checkout docs
+          git status
+          git remote -v
+          git push --force origin docs
