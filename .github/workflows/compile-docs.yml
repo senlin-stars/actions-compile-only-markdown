@@ -70,7 +70,7 @@ jobs:
           git add docs
           git config user.email "bot@users.noreply.github.com"
           git config user.name "senlin-stars"
-          git config user.name "${{ secrets.WRITER_PAT }}"
+          git config user.password "${{ secrets.WRITER_PAT }}"
           git commit -m "publishing docs $( date +'%Y-%m-%d %H-%M-%S' )"
           git subtree split --prefix docs --branch docs
           git checkout docs
