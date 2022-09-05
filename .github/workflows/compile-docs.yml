@@ -11,7 +11,8 @@ jobs:
       - name: Clone the current project to ./
         uses: actions/checkout@v3
         with:
-          ref: main
+          ref:   main
+          token: ${{ secrets.WRITER_PAT }}
 
       - name: Clone the parser to ./tetra
         uses: actions/checkout@v3
@@ -76,4 +77,4 @@ jobs:
           git checkout docs
           git status
           git remote -v
-          git push --force "https://github.com/${{ env.GITHUB_REPOSITORY }}.git" docs
+          git push --force origin docs
