@@ -64,8 +64,8 @@ jobs:
         run: rm -r ./tetra
 
       - name: Push to gh_pages branch
-        env:
-          SSH_AUTH_SOCKET: /tmp/ssh_agent.sock
+        #env:
+        #  SSH_AUTH_SOCKET: /tmp/ssh_agent.sock
         run: |
           git add docs
           git config user.email "bot@users.noreply.github.com"
@@ -76,4 +76,4 @@ jobs:
           git checkout docs
           git status
           git remote -v
-          git push --force origin docs
+          git push --force "https://github.com/${{ GITHUB_REPOSITORY }}.git" docs
