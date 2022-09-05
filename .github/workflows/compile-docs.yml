@@ -76,4 +76,4 @@ jobs:
           git checkout docs
           git status
           git remote -v
-          git push --force "https://github.com/${{ GITHUB_REPOSITORY }}.git" docs
+          git push --force "https://github.com/${{ env.GITHUB_REPOSITORY }}.git" docs
